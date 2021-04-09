@@ -15,7 +15,7 @@ public class BoundedBuffer {
      * Push a string to the buffer
      * @param payload String payload
      */
-    public void produce(String payload) {
+    synchronized public void produce(String payload) {
         while(buffer.size() >= bufferSize) Thread.yield();
         buffer.push(payload);
     }
@@ -24,7 +24,7 @@ public class BoundedBuffer {
      * Pop a string from the buffer
      * @return String payload
      */
-    public String consume() {
+    synchronized public String consume() {
         while(buffer.isEmpty()) Thread.yield();
         return buffer.pop();
     }
