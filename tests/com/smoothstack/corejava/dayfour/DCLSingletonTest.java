@@ -1,3 +1,5 @@
+package com.smoothstack.corejava.dayfour;
+
 import com.smoothstack.corejava.dayfour.DCLSingleton;
 
 import static org.junit.jupiter.api.Assertions.*;

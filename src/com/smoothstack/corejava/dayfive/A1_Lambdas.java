@@ -1,8 +1,6 @@
 package com.smoothstack.corejava.dayfive;
 
-import javax.sound.midi.Soundbank;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class A1_Lambdas {
