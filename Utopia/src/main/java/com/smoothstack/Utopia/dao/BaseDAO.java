@@ -17,8 +17,8 @@ public abstract class BaseDAO<T> implements AutoCloseable {
      * @throws SQLException The connection could not be made.
      * @throws ClassNotFoundException The database driver could not be loaded.
      */
-    public BaseDAO() throws SQLException, ClassNotFoundException {
-        this.connection = DatabaseConnection.getConnection();
+    public BaseDAO(String schema) throws SQLException, ClassNotFoundException {
+        this.connection = DatabaseConnection.getConnection(schema);
         this.connection.setAutoCommit(false);
     }
 

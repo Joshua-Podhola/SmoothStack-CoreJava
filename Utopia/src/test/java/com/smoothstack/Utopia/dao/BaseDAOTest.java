@@ -50,8 +50,8 @@ class BaseDAOTest {
          * @throws SQLException           The connection could not be made.
          * @throws ClassNotFoundException The database driver could not be loaded.
          */
-        public TestDAO() throws SQLException, ClassNotFoundException {
-            super();
+        public TestDAO(String schema) throws SQLException, ClassNotFoundException {
+            super(schema);
         }
 
         /**
@@ -116,9 +116,9 @@ class BaseDAOTest {
 
     @BeforeAll
     static void beforeAll() throws SQLException, ClassNotFoundException {
-        Connection db_connection = DatabaseConnection.getConnection();
+        Connection db_connection = TestsUtil.setUpDB();
         db_connection.setAutoCommit(true);
-        testdao = new TestDAO();
+        testdao = new TestDAO("utopia_test");
 
         Statement stmt = db_connection.createStatement();
         stmt.execute("CREATE TABLE IF NOT EXISTS test_dao (" +
@@ -133,7 +133,7 @@ class BaseDAOTest {
     @SuppressWarnings("SqlWithoutWhere")
     @AfterAll
     static void afterAll() throws SQLException, ClassNotFoundException {
-        Connection db_connection = DatabaseConnection.getConnection();
+        Connection db_connection = DatabaseConnection.getConnection("utopia_test");
         db_connection.setAutoCommit(true);
         Statement stmt = db_connection.createStatement();
         stmt.execute("DELETE FROM test_dao");

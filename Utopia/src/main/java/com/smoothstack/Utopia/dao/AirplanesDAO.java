@@ -17,7 +17,17 @@ public class AirplanesDAO extends BaseDAO<Airplane> {
      * @throws ClassNotFoundException The database driver could not be loaded.
      */
     public AirplanesDAO() throws SQLException, ClassNotFoundException {
-        super();
+        this("utopia");
+    }
+
+    /**
+     * Initializes the internal connection ready for use
+     *
+     * @throws SQLException           The connection could not be made.
+     * @throws ClassNotFoundException The database driver could not be loaded.
+     */
+    public AirplanesDAO(String schema) throws SQLException, ClassNotFoundException {
+        super(schema);
     }
 
     PreparedStatement insert, delete, update, airplaneid, airplanetypeid, airplanetypecapacity, all, insertType;
@@ -44,7 +54,7 @@ public class AirplanesDAO extends BaseDAO<Airplane> {
     @Override
     protected PreparedStatement convertInsert(Airplane target) throws SQLException {
         if (insert == null) {
-            insert = this.connection.prepareStatement("INSERT INTO airplane (type_id) VALUES (?)");
+            insert = this.connection.prepareStatement("INSERT INTO airplane (type_id) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
         }
         insert.setInt(1, target.getType().getId());
         return insert;
@@ -144,10 +154,11 @@ public class AirplanesDAO extends BaseDAO<Airplane> {
      * Enters an airplane directly. Tries to find a type with the given capacity automatically.
      * @param capacity The airplane capacity.
      * @throws SQLException SQL Error
+     * @return id
      */
-    public void insertDirect(int capacity) throws SQLException {
+    public int insertDirect(int capacity) throws SQLException {
         if (insert == null) {
-            insert = this.connection.prepareStatement("INSERT INTO airplane (type_id) VALUES (?)");
+            insert = this.connection.prepareStatement("INSERT INTO airplane (type_id) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
         }
         AirplaneType type = typeFromCapacity(capacity);
         if(type == null) {
@@ -157,6 +168,12 @@ public class AirplanesDAO extends BaseDAO<Airplane> {
 
         insert.setInt(1, type.getId());
         insert.executeUpdate();
+
+        ResultSet keys = insert.getGeneratedKeys();
+        if(keys.next()) {
+            return keys.getInt(1);
+        }
+        return -1;
     }
 
     /**

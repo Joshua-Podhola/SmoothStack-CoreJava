@@ -7,14 +7,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AirplanesDAOTest {
     private static AirplanesDAO airplanesDAO;
+
     @BeforeAll
     static void beforeAll() throws SQLException, ClassNotFoundException {
-        airplanesDAO = new AirplanesDAO();
+        airplanesDAO = new AirplanesDAO("utopia_test");
     }
 
     @AfterAll
@@ -24,41 +26,44 @@ class AirplanesDAOTest {
 
     @Test
     void airplaneFromIDTest() throws SQLException {
-        //Given value for airplane of ID 1: (id: 1, type_id: 1)
-        //Given value for airplane_type of ID 1: (id: 1, max_capacity: 150)
-        Airplane plane = airplanesDAO.airplaneFromID(1);
-        assertEquals(new Airplane(1, new AirplaneType(1, 150)), plane);
+        Airplane plane1 = airplanesDAO.airplaneFromID(1);
+        Airplane plane2 = airplanesDAO.airplaneFromID(2);
+        Airplane planeNull = airplanesDAO.airplaneFromID(3);
+        assertEquals(1, plane1.getType().getId());
+        assertEquals(2, plane2.getType().getId());
+        assertNull(planeNull);
     }
 
     @Test
     void typeFromIDTest() throws SQLException {
-        //Given value for airplane of ID 1: (id: 1, type_id: 1)
-        //Given value for airplane_type of ID 1: (id: 1, max_capacity: 150)
         AirplaneType type = airplanesDAO.typeFromID(1);
-        assertEquals(type, new AirplaneType(1, 150));
+        assertEquals(150, type.getCapacity());
+        assertNull(airplanesDAO.typeFromID(4));
     }
 
     @Test
     void typeFromCapacityTest() throws SQLException {
-        //Given value for airplane of ID 1: (id: 1, type_id: 1)
-        //Given value for airplane_type of ID 1: (id: 1, max_capacity: 150)
         AirplaneType type = airplanesDAO.typeFromCapacity(150);
-        assertEquals(type, new AirplaneType(1, 150));
+        assertEquals(150, type.getCapacity());
+        assertNull(airplanesDAO.typeFromCapacity(4));
     }
 
     @Test
-    void insertDirectTest() {
-        //TODO It'd be dirty but this one might be possible
+    void insertDirectTest() throws SQLException {
+        int id = airplanesDAO.insertDirect(150);
+        assertEquals(150, airplanesDAO.airplaneFromID(id).getType().getCapacity());
+        airplanesDAO.rollback();
     }
 
     @Test
     void insertTypeTest() {
-        //TODO It'd be dirty but this one might be possible
-
+        //TODO
     }
 
     @Test
-    void getAllTest() {
-        //TODO Can this even be unit tested?
+    void getAllTest() throws SQLException {
+        //TODO
+        ArrayList<Airplane> all = airplanesDAO.getAll();
+        assertEquals(2, all.size());
     }
 }

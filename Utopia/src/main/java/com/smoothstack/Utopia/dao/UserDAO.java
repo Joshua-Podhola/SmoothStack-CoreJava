@@ -17,7 +17,17 @@ public class UserDAO extends BaseDAO<User> {
      * @throws ClassNotFoundException The database driver could not be loaded.
      */
     public UserDAO() throws SQLException, ClassNotFoundException {
-        super();
+        this("utopia");
+    }
+
+    /**
+     * Initializes the internal connection ready for use
+     *
+     * @throws SQLException           The connection could not be made.
+     * @throws ClassNotFoundException The database driver could not be loaded.
+     */
+    public UserDAO(String schema) throws SQLException, ClassNotFoundException {
+        super(schema);
     }
 
     PreparedStatement insert, delete, update, userRoleID, userID, all, allRoles, insertType, byUsername;
@@ -50,7 +60,9 @@ public class UserDAO extends BaseDAO<User> {
     @Override
     protected PreparedStatement convertInsert(User target) throws SQLException {
         if (insert == null) {
-            insert = this.connection.prepareStatement("INSERT INTO user (role_id, given_name, family_name, username, email, password, phone) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            insert = this.connection.prepareStatement("INSERT INTO user " +
+                    "(role_id, given_name, family_name, username, email, password, phone) VALUES " +
+                    "(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         }
         insert.setInt(1, target.getRole().getId());
         insert.setString(2, target.getGiven_name());
@@ -129,8 +141,8 @@ public class UserDAO extends BaseDAO<User> {
         if (userID == null) {
             userID = connection.prepareStatement("SELECT * FROM user WHERE ID = ?");
         }
-        userRoleID.setInt(1, id);
-        ResultSet rs = userRoleID.executeQuery();
+        userID.setInt(1, id);
+        ResultSet rs = userID.executeQuery();
         if(rs.next()) {
             return convertTo(rs);
         }
@@ -164,13 +176,14 @@ public class UserDAO extends BaseDAO<User> {
      * @param password Password
      * @param phone Phone #
      * @throws SQLException SQL Error
+     * @return id of user, else -1
      */
-    public void insertDirect(int roleID, String given_name, String family_name, String username, String email,
+    public int insertDirect(int roleID, String given_name, String family_name, String username, String email,
                              String password, String phone) throws SQLException {
         if (insert == null) {
             insert = this.connection.prepareStatement("INSERT INTO user " +
                     "(role_id, given_name, family_name, username, email, password, phone) VALUES " +
-                    "(?, ?, ?, ?, ?, ?, ?)");
+                    "(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         }
         insert.setInt(1, roleID);
         insert.setString(2, given_name);
@@ -180,6 +193,13 @@ public class UserDAO extends BaseDAO<User> {
         insert.setString(6,password);
         insert.setString(7, phone);
         insert.executeUpdate();
+
+        ResultSet keys = insert.getGeneratedKeys();
+        if(keys.next()) {
+            return keys.getInt(1);
+        }
+
+        return -1;
     }
 
     /**

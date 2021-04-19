@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class AirportDAO extends BaseDAO<Airport> {
     PreparedStatement insert, delete, get_id, update, all;
+
     /**
      * Initializes the internal connection ready for use
      *
@@ -16,7 +17,17 @@ public class AirportDAO extends BaseDAO<Airport> {
      * @throws ClassNotFoundException The database driver could not be loaded.
      */
     public AirportDAO() throws SQLException, ClassNotFoundException {
-        super();
+        this("utopia");
+    }
+
+    /**
+     * Initializes the internal connection ready for use
+     *
+     * @throws SQLException           The connection could not be made.
+     * @throws ClassNotFoundException The database driver could not be loaded.
+     */
+    public AirportDAO(String schema) throws SQLException, ClassNotFoundException {
+        super(schema);
     }
 
     /**

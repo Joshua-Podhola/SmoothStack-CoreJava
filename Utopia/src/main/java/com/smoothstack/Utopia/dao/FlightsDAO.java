@@ -17,7 +17,17 @@ public class FlightsDAO extends BaseDAO<Flight> {
      * @throws ClassNotFoundException The database driver could not be loaded.
      */
     public FlightsDAO() throws SQLException, ClassNotFoundException {
-        super();
+        this("utopia");
+    }
+
+    /**
+     * Initializes the internal connection ready for use
+     *
+     * @throws SQLException           The connection could not be made.
+     * @throws ClassNotFoundException The database driver could not be loaded.
+     */
+    public FlightsDAO(String schema) throws SQLException, ClassNotFoundException {
+        super(schema);
         airportDAO = new AirportDAO();
         airplaneDAO = new AirplanesDAO();
     }

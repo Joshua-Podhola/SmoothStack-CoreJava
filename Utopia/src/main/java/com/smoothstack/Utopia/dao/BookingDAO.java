@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class BookingDAO extends BaseDAO<Booking> {
     FlightsDAO flightsDAO;
+
     /**
      * Initializes the internal connection ready for use
      *
@@ -17,7 +18,17 @@ public class BookingDAO extends BaseDAO<Booking> {
      * @throws ClassNotFoundException The database driver could not be loaded.
      */
     public BookingDAO() throws SQLException, ClassNotFoundException {
-        super();
+        this("utopia");
+    }
+
+    /**
+     * Initializes the internal connection ready for use
+     *
+     * @throws SQLException           The connection could not be made.
+     * @throws ClassNotFoundException The database driver could not be loaded.
+     */
+    public BookingDAO(String schema) throws SQLException, ClassNotFoundException {
+        super(schema);
         flightsDAO = new FlightsDAO();
     }
     PreparedStatement insert, delete, update, allPassengers, insertPassenger, bookingFromID, passengerFromID, all,
