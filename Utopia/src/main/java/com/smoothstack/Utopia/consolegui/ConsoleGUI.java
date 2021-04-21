@@ -14,7 +14,7 @@ public class ConsoleGUI {
         while(true){
             switch (getNumericalChoice("Welcome to Utopia Airlines! You are...", choices)) {
                 case 1:
-                    System.out.println(1);
+                    EmployeeGUI.EmployeeMainMenu();
                     break;
                 case 2:
                     System.out.println(2);

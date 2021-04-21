@@ -205,6 +205,11 @@ public class ManageFlights {
                         );
                     } else {
                         flightSeatsDAO.setAssigned(fs);
+                        flightSeatsDAO.update(
+                                getIntegerInput("How many economy class seats?"),
+                                getIntegerInput("How many first class seats?"),
+                                getIntegerInput("How many business class seats?")
+                        );
                     }
             }
         }
