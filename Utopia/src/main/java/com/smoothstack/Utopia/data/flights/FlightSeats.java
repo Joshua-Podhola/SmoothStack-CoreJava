@@ -6,29 +6,27 @@ import java.util.Objects;
 public class FlightSeats implements Serializable {
     private static final long serialVersionUID = -1839783429576149428L;
 
-    private int flight_id;
+    private final Flight flight;
     private int first, business, economy;
 
     /**
      * Flight seats constructor
-     * @param flight_id The flight
-     * @param first # of first class seats free
+     *
+     * @param flight   The flight the seats are for
+     * @param first    # of first class seats free
      * @param business # of business class seats free
-     * @param economy # of economy class seats free
+     * @param economy  # of economy class seats free
      */
-    public FlightSeats(int flight_id, int first, int business, int economy) {
-        this.flight_id = flight_id;
+    public FlightSeats(Flight flight, int first, int business, int economy) {
+        assert (flight != null);
+        this.flight = flight;
         this.first = first;
         this.business = business;
         this.economy = economy;
     }
 
-    public int getFlight_id() {
-        return flight_id;
-    }
-
-    public void setFlight_id(int flight_id) {
-        this.flight_id = flight_id;
+    public Flight getFlight() {
+        return flight;
     }
 
     public int getFirst() {
@@ -60,16 +58,11 @@ public class FlightSeats implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlightSeats that = (FlightSeats) o;
-        return flight_id == that.flight_id && first == that.first && business == that.business && economy == that.economy;
+        return first == that.first && business == that.business && economy == that.economy && flight.equals(that.flight);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(flight_id, first, business, economy);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Seats for Flight #%d: %d First Class, %d Business Class, %d Economy Class", flight_id, first, business, economy);
+        return Objects.hash(flight, first, business, economy);
     }
 }

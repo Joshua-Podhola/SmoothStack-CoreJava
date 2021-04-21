@@ -8,11 +8,11 @@ import java.util.Objects;
 public class BookingGuest {
     private static final long serialVersionUID = 5620874373868574182L;
 
-    private Booking booking;
+    private final Booking booking;
     private String contact_email, contact_phone;
 
     /**
-     * @param booking The booking the guest had made.
+     * @param booking       The booking the guest had made.
      * @param contact_email The guest's contact email.
      * @param contact_phone The guest's contact phone number.
      */
@@ -24,10 +24,6 @@ public class BookingGuest {
 
     public Booking getBooking() {
         return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
     }
 
     public String getContact_email() {

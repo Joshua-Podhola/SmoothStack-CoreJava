@@ -1,28 +1,29 @@
 package com.smoothstack.Utopia.consolegui;
 
-import com.smoothstack.Utopia.consolegui.administrator.AdministratorMenu;
-import com.smoothstack.Utopia.consolegui.agent.AgentMenu;
-import com.smoothstack.Utopia.consolegui.traveler.TravelerMenu;
-import com.smoothstack.Utopia.util.Choices;
+import static com.smoothstack.Utopia.util.Choices.*;
+
+import java.util.ArrayList;
 
 public class ConsoleGUI {
     public static void main(String[] args) {
-        while(true) {
-            int choice = Choices.getNumericalChoice("Welcome to the Utopia Airlines Management System. Which category of a user are you?\n" +
-                    "1) Employee\n" +
-                    "2) Administrator\n" +
-                    "3) Traveller", 3);
-
-            switch (choice) {
+        ArrayList<String> choices = new ArrayList<>();
+        choices.add("A Travel Agent");
+        choices.add("A User");
+        choices.add("An Administrator");
+        choices.add("Wanting to Leave");
+        while(true){
+            switch (getNumericalChoice("Welcome to Utopia Airlines! You are...", choices)) {
                 case 1:
-                    AgentMenu.EmployeeMenu();
+                    System.out.println(1);
                     break;
                 case 2:
-                    AdministratorMenu.AdminMenu();
+                    System.out.println(2);
                     break;
                 case 3:
-                    TravelerMenu.GuestMenu();
+                    AdministratorGUI.AdministratorMainMenu();
                     break;
+                case 4:
+                    return;
             }
         }
     }

@@ -12,12 +12,12 @@ import java.util.Objects;
 public class BookingAgent implements Serializable {
     private static final long serialVersionUID = -497623075648943439L;
 
-    private Booking booking;
-    private User agent;
+    private final Booking booking;
+    private final User agent;
 
     /**
      * @param booking The booking the agent made
-     * @param agent The agent that made the booking
+     * @param agent   The agent that made the booking
      */
     public BookingAgent(Booking booking, User agent) {
         this.booking = booking;
@@ -28,16 +28,8 @@ public class BookingAgent implements Serializable {
         return booking;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
     public User getAgent() {
         return agent;
-    }
-
-    public void setAgent(User agent) {
-        this.agent = agent;
     }
 
     @Override

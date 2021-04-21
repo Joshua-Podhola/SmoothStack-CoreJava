@@ -1,6 +1,7 @@
 package com.smoothstack.Utopia.data.flights;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -8,13 +9,14 @@ import java.util.Objects;
  */
 public class AirplaneType implements Serializable {
     private static final long serialVersionUID = -8002616067462750335L;
-
-    private int capacity, id;
+    private final int id;
+    private int capacity;
+    private Collection<Airplane> airplanes;
 
     /**
      * @param capacity The maximum number of passengers that may fly on the plane.
      */
-    public AirplaneType( int id, int capacity) {
+    public AirplaneType(int id, int capacity) {
         this.capacity = capacity;
         this.id = id;
     }
@@ -31,8 +33,12 @@ public class AirplaneType implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Collection<Airplane> getAirplanes() {
+        return airplanes;
+    }
+
+    public void setAirplanes(Collection<Airplane> airplanes) {
+        this.airplanes = airplanes;
     }
 
     @Override
@@ -40,11 +46,11 @@ public class AirplaneType implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AirplaneType that = (AirplaneType) o;
-        return capacity == that.capacity && id == that.id;
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(capacity, id);
+        return Objects.hash(id);
     }
 }

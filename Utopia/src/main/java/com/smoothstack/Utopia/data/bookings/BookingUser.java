@@ -10,12 +10,12 @@ import java.util.Objects;
 public class BookingUser {
     private static final long serialVersionUID = -1769398313484158672L;
 
-    private Booking booking;
-    private User user;
+    private final Booking booking;
+    private final User user;
 
     /**
      * @param booking The booking the user made.
-     * @param user The user that made the booking.
+     * @param user    The user that made the booking.
      */
     public BookingUser(Booking booking, User user) {
         this.booking = booking;
@@ -26,16 +26,8 @@ public class BookingUser {
         return booking;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override

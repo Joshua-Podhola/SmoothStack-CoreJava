@@ -8,13 +8,14 @@ import java.util.Objects;
  */
 public class Airplane implements Serializable {
     private static final long serialVersionUID = -2226617601981291536L;
-
+    private final int id;
     private AirplaneType type;
-    private int id;
+    private Route route;
+    private Airplane airplane;
 
     /**
      * @param type The airplane type
-     * @param id The airplane id, if known
+     * @param id   The airplane id, if known
      */
     public Airplane(int id, AirplaneType type) {
         this.type = type;
@@ -33,8 +34,20 @@ public class Airplane implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
     }
 
     @Override
@@ -42,16 +55,11 @@ public class Airplane implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Airplane airplane = (Airplane) o;
-        return id == airplane.id && Objects.equals(type, airplane.type);
+        return id == airplane.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, id);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%d) Type %d (Carries %d)", id, type.getId(), type.getCapacity());
+        return Objects.hash(id);
     }
 }

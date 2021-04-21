@@ -1,7 +1,10 @@
 package com.smoothstack.Utopia.data.flights;
 
+import com.smoothstack.Utopia.data.bookings.Booking;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -10,19 +13,19 @@ import java.util.Objects;
 public class Flight implements Serializable {
     private static final long serialVersionUID = 290423172623782466L;
 
-    private int id;
+    private final int id;
     private Route route;
     private Airplane airplane;
     private LocalDateTime departure_time;
     private int reserved_seats;
+    private Collection<Booking> bookings;
     private float seat_price;
+    private FlightSeats flightSeats;
 
     /**
-     * @param route The route the flight takes
-     * @param airplane The airplane used to fly
      * @param departure_time The date and time of departure
      * @param reserved_seats The number of seats reserved
-     * @param seat_price The price of a seat
+     * @param seat_price     The price of a seat
      */
     public Flight(int id, Route route, Airplane airplane, LocalDateTime departure_time, int reserved_seats, float seat_price) {
         this.id = id;
@@ -77,8 +80,20 @@ public class Flight implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Collection<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Collection<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public FlightSeats getFlightSeats() {
+        return flightSeats;
+    }
+
+    public void setFlightSeats(FlightSeats flightSeats) {
+        this.flightSeats = flightSeats;
     }
 
     @Override
@@ -86,17 +101,22 @@ public class Flight implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Flight flight = (Flight) o;
-        return id == flight.id && reserved_seats == flight.reserved_seats && Float.compare(flight.seat_price, seat_price) == 0 && Objects.equals(route, flight.route) && Objects.equals(airplane, flight.airplane) && Objects.equals(departure_time, flight.departure_time);
+        return id == flight.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, route, airplane, departure_time, reserved_seats, seat_price);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return String.format("%d) %S -> %S @ %s Serving %d/%d for $%.2f", id, route.getOrigin().get_iata(),
-                route.getDestination().get_iata(), departure_time.toString(), reserved_seats, airplane.getType().getCapacity(), seat_price);
+        return String.format("%s: Flight %s -> %s Seats %d/%d%n",
+                getDeparture_time().toString(),
+                getRoute().getOrigin().getCity(),
+                getRoute().getDestination().getCity(),
+                getReserved_seats(),
+                getAirplane().getType().getCapacity()
+        );
     }
 }

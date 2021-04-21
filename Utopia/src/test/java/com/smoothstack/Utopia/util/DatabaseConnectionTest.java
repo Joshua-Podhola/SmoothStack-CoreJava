@@ -6,10 +6,11 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatabaseConnectionTest {
     Connection c;
+
     @Test
     void getConnectionTest() throws SQLException, ClassNotFoundException {
         c = DatabaseConnection.getConnection();

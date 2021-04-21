@@ -9,20 +9,19 @@ import java.util.Objects;
  */
 public class Passenger implements Serializable {
     private static final long serialVersionUID = -1695638826046622134L;
-
+    private final int id;
     private Booking booking;
     private String given_name, family_name, gender, address;
     private LocalDate dob;
-    private int id;
 
     /**
-     * @param id Their passenger ID
-     * @param booking What booking they are a part of.
-     * @param given_name Their first name.
+     * @param id          Their passenger ID
+     * @param booking     Their booking
+     * @param given_name  Their first name.
      * @param family_name Their last name.
-     * @param gender Their gender.
-     * @param address Their address.
-     * @param dob Their date of birth.
+     * @param gender      Their gender.
+     * @param address     Their address.
+     * @param dob         Their date of birth.
      */
     public Passenger(int id, Booking booking, String given_name, String family_name, String gender, String address, LocalDate dob) {
         this.id = id;
@@ -86,26 +85,21 @@ public class Passenger implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Passenger passenger = (Passenger) o;
-        return id == passenger.id && booking.equals(passenger.booking) && given_name.equals(passenger.given_name) && family_name.equals(passenger.family_name) && gender.equals(passenger.gender) && address.equals(passenger.address) && dob.equals(passenger.dob);
+        return id == passenger.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(booking, given_name, family_name, gender, address, dob, id);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return String.format("%d) %s %s, %s, from %s, born %s, party of booking %d",
-                id, given_name, family_name, gender, address, dob.toString(), booking.getId());
+        return String.format("%s %s", given_name, family_name);
     }
 }

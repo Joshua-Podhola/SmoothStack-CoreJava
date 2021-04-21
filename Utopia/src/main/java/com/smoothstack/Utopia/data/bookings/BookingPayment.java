@@ -7,25 +7,18 @@ import java.util.Objects;
  */
 public class BookingPayment {
     private static final long serialVersionUID = -1265558672390542705L;
-
+    private final Booking booking;
     private String stripe_id;
     private boolean refunded;
 
     /**
      * @param stripe_id The card number of the payment.
-     * @param refunded Was this payment refunded?
+     * @param refunded  Was this payment refunded?
      */
-    public BookingPayment(String stripe_id, boolean refunded) {
+    public BookingPayment(Booking booking, String stripe_id, boolean refunded) {
+        this.booking = booking;
         this.stripe_id = stripe_id;
         this.refunded = refunded;
-    }
-
-    /**
-     * @param stripe_id The card number of the payment.
-     * @param refunded Was this payment refunded? 0 if false, else true.
-     */
-    public BookingPayment(String stripe_id, int refunded) {
-        this(stripe_id, refunded == 0);
     }
 
     public String getStripe_id() {
@@ -42,6 +35,10 @@ public class BookingPayment {
 
     public void setRefunded(boolean refunded) {
         this.refunded = refunded;
+    }
+
+    public Booking getBooking() {
+        return booking;
     }
 
     @Override

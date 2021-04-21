@@ -1,6 +1,10 @@
 package com.smoothstack.Utopia.data.users;
 
+import com.smoothstack.Utopia.data.bookings.BookingAgent;
+import com.smoothstack.Utopia.data.bookings.BookingUser;
+
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -10,20 +14,23 @@ public class User implements Serializable {
     private static final long serialVersionUID = 763678477714112684L;
 
 
-    private int id;
+    private final int id;
     private UserRole role;
     private String given_name, family_name, username, email, password, phone;
+    private Collection<BookingUser> bookingUsers;
+    private Collection<BookingAgent> bookingAgents;
 
     /**
      * Constructs a new User.
-     * @param id ID
-     * @param role A UserRole representing the user's permission level.
-     * @param given_name The user's first name.
+     *
+     * @param id          ID
+     * @param role        A UserRole representing the user's permission level.
+     * @param given_name  The user's first name.
      * @param family_name The user's surname.
-     * @param username The login username of the user.
-     * @param email The email address of the user.
-     * @param password The password of the user.
-     * @param phone The phone # of the user.
+     * @param username    The login username of the user.
+     * @param email       The email address of the user.
+     * @param password    The password of the user.
+     * @param phone       The phone # of the user.
      */
     public User(int id, UserRole role, String given_name, String family_name, String username, String email, String password, String phone) {
         this.id = id;
@@ -96,8 +103,20 @@ public class User implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Collection<BookingUser> getBookingUsers() {
+        return bookingUsers;
+    }
+
+    public void setBookingUsers(Collection<BookingUser> bookingUsers) {
+        this.bookingUsers = bookingUsers;
+    }
+
+    public Collection<BookingAgent> getBookingAgents() {
+        return bookingAgents;
+    }
+
+    public void setBookingAgents(Collection<BookingAgent> bookingAgents) {
+        this.bookingAgents = bookingAgents;
     }
 
     @Override
@@ -105,16 +124,11 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && role.equals(user.role) && given_name.equals(user.given_name) && family_name.equals(user.family_name) && username.equals(user.username) && email.equals(user.email) && password.equals(user.password) && phone.equals(user.phone);
+        return id == user.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role, given_name, family_name, username, email, password, phone);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%d) %s %s %s is %s at %s with number %s", id, role.getName(), given_name, family_name, username, email, phone);
+        return Objects.hash(id);
     }
 }
