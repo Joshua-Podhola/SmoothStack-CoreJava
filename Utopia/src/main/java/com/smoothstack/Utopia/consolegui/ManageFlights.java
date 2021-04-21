@@ -1,13 +1,7 @@
 package com.smoothstack.Utopia.consolegui;
 
-import com.smoothstack.Utopia.dao.flights.AirplaneDAO;
-import com.smoothstack.Utopia.dao.flights.AirportDAO;
-import com.smoothstack.Utopia.dao.flights.FlightDAO;
-import com.smoothstack.Utopia.dao.flights.RouteDAO;
-import com.smoothstack.Utopia.data.flights.Airplane;
-import com.smoothstack.Utopia.data.flights.Airport;
-import com.smoothstack.Utopia.data.flights.Flight;
-import com.smoothstack.Utopia.data.flights.Route;
+import com.smoothstack.Utopia.dao.flights.*;
+import com.smoothstack.Utopia.data.flights.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -106,6 +100,7 @@ public class ManageFlights {
         AirportDAO airportDAO = new AirportDAO(connection);
         RouteDAO routeDAO = new RouteDAO(connection);
         AirplaneDAO airplaneDAO = new AirplaneDAO(connection);
+        FlightSeatsDAO flightSeatsDAO = new FlightSeatsDAO(connection);
         ArrayList<Airport> airports = airportDAO.search(getStringInput("Enter origin city search term:"));
         if (airports == null || airports.size() == 0) {
             System.out.println("Query produced no results.");
@@ -127,13 +122,22 @@ public class ManageFlights {
         }
         //TODO: Query for airplane. Could maybe add names to planes or plane type names to the schema.
         Airplane airplane = airplaneDAO.getByID(1);
-        flightDAO.insert(
+        Flight flight = flightDAO.insert(
                 route,
                 airplane,
                 getDateTimeInput("What is the departure time"),
                 getIntegerInput("How many seats are reserved?"), //Could also initialize this to 0 to start?
                 getFloatInput("What is the ticket price?")
         );
+
+        if(getBoolInput("Flight created; register seats now?")) {
+            flightSeatsDAO.insert(
+                    flight,
+                    getIntegerInput("How many economy class seats?"),
+                    getIntegerInput("How many first class seats?"),
+                    getIntegerInput("How many business class seats?")
+                    );
+        }
         connection.commit();
         System.out.println("Flight created.");
     }
@@ -143,9 +147,11 @@ public class ManageFlights {
         choices_update.add("Departure Time");
         choices_update.add("Seat Price");
         choices_update.add("Route");
+        choices_update.add("Seats");
         FlightDAO flightDAO = new FlightDAO(connection);
         AirportDAO airportDAO = new AirportDAO(connection);
         RouteDAO routeDAO = new RouteDAO(connection);
+        FlightSeatsDAO flightSeatsDAO = new FlightSeatsDAO(connection);
         ArrayList<Flight> results = searchFlights(connection);
         if (results == null || results.size() == 0) {
             System.out.println("Query produced no results.");
@@ -187,6 +193,19 @@ public class ManageFlights {
                     connection.commit();
                     System.out.println("Updated route successfully.");
                     break;
+                case 4:
+                    FlightSeats fs = flightSeatsDAO.getByID(f.getId());
+                    if(fs == null) {
+                        System.out.println("No existing seat information for flight. Creating...");
+                        flightSeatsDAO.insert(
+                                f,
+                                getIntegerInput("How many economy class seats?"),
+                                getIntegerInput("How many first class seats?"),
+                                getIntegerInput("How many business class seats?")
+                        );
+                    } else {
+                        flightSeatsDAO.setAssigned(fs);
+                    }
             }
         }
     }

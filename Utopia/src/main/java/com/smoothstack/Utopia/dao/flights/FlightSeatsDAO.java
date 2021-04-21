@@ -24,8 +24,8 @@ public class FlightSeatsDAO extends BaseDAO<FlightSeats> {
 
         ps.setInt(1, flight.getId());
         ps.setInt(2, economy);
-        ps.setInt(2, first);
-        ps.setInt(2, business);
+        ps.setInt(3, first);
+        ps.setInt(4, business);
         ps.executeUpdate();
 
         ResultSet keys = ps.getGeneratedKeys();
@@ -41,6 +41,23 @@ public class FlightSeatsDAO extends BaseDAO<FlightSeats> {
             return convert(rs);
         }
         return null;
+    }
+
+    public void update(int economy, int first, int business) throws SQLException {
+        assertHasAssignment();
+        PreparedStatement ps = db_connection.prepareStatement(
+                "UPDATE flight_seats SET economy=?, first=?, business=? WHERE flight_id=?"
+        );
+
+        ps.setInt(1, economy);
+        ps.setInt(2, first);
+        ps.setInt(3, business);
+        ps.setInt(4, assigned.getFlight().getId());
+
+        assigned.setEconomy(economy);
+        assigned.setFirst(first);
+        assigned.setBusiness(business);
+        ps.executeUpdate();
     }
 
     @Override
